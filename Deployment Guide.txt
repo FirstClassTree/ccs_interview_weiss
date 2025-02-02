@@ -1,0 +1,13 @@
+Pre-requisits: Docker, git
+Cloning The code base: git clone https://github.com/FirstClassTree/ccs_interview_weiss
+Building the Docker Image:
+cd GO
+docker build -t game-module .
+Running the Container:
+
+Running the server:
+docker run --rm -p 8080:8080 game-module server
+
+Running a client:
+
+docker run --rm -p 8080:8080 game-module client
