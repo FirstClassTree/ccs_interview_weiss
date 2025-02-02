@@ -3,6 +3,7 @@
 package game
 
 import (
+	"strconv"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -80,5 +81,30 @@ func TestValidateGuessCorrectness(t *testing.T) {
 	for _, test := range tests {
 		isCorrect := ValidateGuessCorrectness(test.guess, &test.predefinedNumber, &test.predefinedPrime)
 		assert.Equal(t, test.expectedMatch, isCorrect, "guess: %d, predefinedNumber: %d, predefinedPrime: %d", test.guess, test.predefinedNumber, test.predefinedPrime)
+	}
+}
+
+// added testss
+func TestGeneratePrefix(t *testing.T) {
+	tests := []struct {
+		guess int
+	}{
+		{guess: 10},
+		{guess: 75},
+		{guess: 150},
+		{guess: 200},
+		{guess: 50},
+		{guess: 0},
+	}
+	for _, test := range tests {
+		prefix := GeneratePrefix(test.guess)
+		assert.Contains(t, prefix, strconv.Itoa(test.guess), "guess: %d", test.guess)
+		if test.guess >= 0 && test.guess <= 50 {
+			assert.Contains(t, prefix, "Your guess is within the safe zone!", "guess: %d", test.guess)
+		} else if test.guess > 50 && test.guess <= 150 {
+			assert.Contains(t, prefix, "Be careful! Your guess is in the uncertain range.", "guess: %d", test.guess)
+		} else {
+			assert.Contains(t, prefix, "Your guess is in the high-risk zone!", "guess: %d", test.guess)
+		}
 	}
 }

@@ -74,12 +74,12 @@ func ValidateGuessCorrectness(guess int, predefinedNumber *int, predefinedPrime 
 
 }
 
-func GeneratePrefix(guess int) {
+func GeneratePrefix(guess int) string {
 	// Initialize a random seed for unpredictable results
-	rand.New(rand.NewSource(time.Now().UnixNano()))
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 
 	// Randomly select one of three different string formats
-	formatChoice := rand.Intn(3)
+	formatChoice := r.Intn(3)
 	var prefix string
 
 	// Conditional logic based on the guess
@@ -114,4 +114,6 @@ func GeneratePrefix(guess int) {
 	}
 
 	fmt.Sprintf("%s", prefix)
+	//added return because it di't return anything
+	return prefix
 }
