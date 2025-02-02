@@ -1,19 +1,63 @@
 package game
 
 import (
+	"errors"
 	"fmt"
 	"math/rand"
 	"strconv"
+	"strings"
 	"time"
 )
 
 func ValidateGuess(input string) (int, error) {
-	guess, err := strconv.Atoi(input)
+	trimmedInput := strings.TrimSpace(input)
+	guess, err := strconv.Atoi(trimmedInput)
+	if err != nil {
+		return 0, errors.New("input is not a valid number")
+	}
+	if guess < 1 || guess > 100 {
+		return 0, errors.New("input must be a number between 1 and 100")
+	}
 	return guess, err
 }
+func generateCorrectNumber(r *rand.Rand) int {
+	//generate random number between 1 - 100
+	number := r.Intn(100) + 1
 
-func ValidateGuessCorrectness(guess int) bool {
-	return guess == 42
+	if number%2 != 0 {
+		// Add a random prime number less than 17
+		primes := []int{2, 3, 5, 7, 11, 13}
+		number += primes[rand.Intn(len(primes))]
+	} else {
+		// Reverse the digits of the number i
+		reversed := reverseDigits(number)
+		number = reversed
+	}
+
+	if number >= 100 {
+		number /= 2
+	} else if number < 50 {
+		number *= 2
+	}
+
+	return number
+}
+
+func reverseDigits(n int) int {
+	reversed := 0
+	for n > 0 {
+		reversed = reversed*10 + n%10
+		n /= 10
+	}
+	return reversed
+}
+
+// added control over rand.Ran in order for testing to work effectivliy, while regular use is also more flexiable now
+func ValidateGuessCorrectness(guess int, r *rand.Rand) bool {
+
+	//added function to generate the number
+	return guess == generateCorrectNumber(r)
+
 }
 
 func GeneratePrefix(guess int) {

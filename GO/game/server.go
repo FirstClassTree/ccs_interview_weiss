@@ -3,7 +3,9 @@ package game
 import (
 	"fmt"
 	"log"
+	"math/rand"
 	"net"
+	"time"
 )
 
 func StartServer() {
@@ -44,7 +46,9 @@ func StartServer() {
 		} else {
 			// Check if the guess matches the correct answer
 			var response, prefix string
-			if ValidateGuessCorrectness(numGuess) {
+			source := rand.NewSource(time.Now().UnixNano())
+			r := rand.New(source)
+			if ValidateGuessCorrectness(numGuess, r) {
 				// prefix = GeneratePrefix()
 				response = "Congratulations! You guessed the correct number!"
 			} else {
