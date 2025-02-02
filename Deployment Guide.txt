@@ -11,4 +11,4 @@ Running a client:
 docker run --rm -p 8080:8080 game-module client
 
 Play Guide:
-to play two players must join and each round guess a number each in its turn
+to play two players must join and each round guess a number each in its turn.
