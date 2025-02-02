@@ -20,14 +20,29 @@ func ValidateGuess(input string) (int, error) {
 	}
 	return guess, err
 }
-func generateCorrectNumber(r *rand.Rand) int {
+
+// added capability to not work randomly but define a specific int
+func generateCorrectNumber(predefinedNumber *int, predefinedPrime *int) int {
 	//generate random number between 1 - 100
-	number := r.Intn(100) + 1
+	var number int
+	if predefinedNumber != nil {
+		number = *predefinedNumber
+	} else {
+		// Generate random number between 1 - 100
+		source := rand.NewSource(time.Now().UnixNano())
+		r := rand.New(source)
+		number = r.Intn(100) + 1
+	}
 
 	if number%2 != 0 {
+		if predefinedPrime != nil {
+			number += *predefinedPrime
+		} else {
+			primes := []int{2, 3, 5, 7, 11, 13}
+			number += primes[rand.Intn(len(primes))]
+		}
 		// Add a random prime number less than 17
-		primes := []int{2, 3, 5, 7, 11, 13}
-		number += primes[rand.Intn(len(primes))]
+
 	} else {
 		// Reverse the digits of the number i
 		reversed := reverseDigits(number)
@@ -52,11 +67,10 @@ func reverseDigits(n int) int {
 	return reversed
 }
 
-// added control over rand.Ran in order for testing to work effectivliy, while regular use is also more flexiable now
-func ValidateGuessCorrectness(guess int, r *rand.Rand) bool {
-
+// added control over the random number by defining it explicity or nil for random
+func ValidateGuessCorrectness(guess int, predefinedNumber *int, predefinedPrime *int) bool {
 	//added function to generate the number
-	return guess == generateCorrectNumber(r)
+	return guess == generateCorrectNumber(predefinedNumber, predefinedPrime)
 
 }
 

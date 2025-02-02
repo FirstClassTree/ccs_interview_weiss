@@ -1,7 +1,8 @@
+// in order to run use go test
+
 package game
 
 import (
-	"math/rand"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -60,24 +61,24 @@ func TestValidateGuessCorrectness(t *testing.T) {
 	input: "007", "81", " 10  "
 	invalid: "$", "-15", " "
 	*/
-	// to override the random generation we added support to pick a specific rand
 
+	// to override the random generation added support to pick a specific number instead of random genration
 	// given specific seed to ensure reproducability
-	source := rand.NewSource(1)
-	r := rand.New(source)
 
 	// Test cases with expected results
 	tests := []struct {
-		guess         int
-		expectedMatch bool
+		guess            int
+		predefinedNumber int
+		predefinedPrime  int
+		expectedMatch    bool
 	}{
-		{guess: 10, expectedMatch: false}, // Example case, adjust based on the fixed seed
-		{guess: 20, expectedMatch: false}, // Example case, adjust based on the fixed seed
-		// Add more test cases as needed
+		// -1 means irrlevent
+		{guess: 6, predefinedNumber: 1, predefinedPrime: 2, expectedMatch: true},  // Exact match
+		{guess: 4, predefinedNumber: 2, predefinedPrime: -1, expectedMatch: true}, // Exact match
+		{guess: 55, predefinedNumber: 3, predefinedPrime: 15, expectedMatch: false},
 	}
-
 	for _, test := range tests {
-		isCorrect := ValidateGuessCorrectness(test.guess, r)
-		assert.Equal(t, test.expectedMatch, isCorrect, "guess: %d", test.guess)
+		isCorrect := ValidateGuessCorrectness(test.guess, &test.predefinedNumber, &test.predefinedPrime)
+		assert.Equal(t, test.expectedMatch, isCorrect, "guess: %d, predefinedNumber: %d, predefinedPrime: %d", test.guess, test.predefinedNumber, test.predefinedPrime)
 	}
 }
