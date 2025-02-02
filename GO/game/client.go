@@ -16,7 +16,7 @@ func StartClient(address string) error {
 	}
 	defer conn.Close()
 
-	fmt.Println("Connected to the game server as a single player.")
+	fmt.Println("Connected to the game server.")
 
 	// Create a reader to capture input from stdin
 	reader := bufio.NewReader(os.Stdin)
